@@ -2052,7 +2052,9 @@ export default class MetamaskController extends EventEmitter {
    * @returns {object} vault
    */
   async createNewVaultAndKeychain(password) {
+    console.log('090909');
     const releaseLock = await this.createVaultMutex.acquire();
+    console.log('909090');
     try {
       let vault;
       const accounts = await this.keyringController.getAccounts();
@@ -2066,9 +2068,10 @@ export default class MetamaskController extends EventEmitter {
         this.preferencesController.setAddresses(addresses);
         this.selectFirstIdentity();
       }
-
+      console.log('vault=====', vault);
       return vault;
     } finally {
+      console.log('33333333');
       releaseLock();
     }
   }
@@ -2707,6 +2710,7 @@ export default class MetamaskController extends EventEmitter {
     const seedPhraseAsBuffer = Buffer.from(serialized.mnemonic);
 
     const accounts = await primaryKeyring.getAccounts();
+    console.log('accounts====', accounts);
     if (accounts.length < 1) {
       throw new Error('MetamaskController - No accounts found');
     }

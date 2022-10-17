@@ -96,7 +96,7 @@ export default class NewAccount extends PureComponent {
 
     const { password } = this.state;
     const { onSubmit, history } = this.props;
-
+    console.log('password', password);
     try {
       await onSubmit(password);
 
@@ -219,7 +219,7 @@ export default class NewAccount extends PureComponent {
             disabled={!this.isValid() || !termsChecked}
             onClick={this.handleCreate}
           >
-            {t('create')}
+            {t('create')}12345
           </Button>
         </form>
       </div>

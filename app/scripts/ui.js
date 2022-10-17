@@ -35,6 +35,7 @@ const WORKER_KEEP_ALIVE_MESSAGE = 'WORKER_KEEP_ALIVE_MESSAGE';
  * if service worker is inactive it is reactivated and script re-loaded
  * Time has been kept to 1000ms but can be reduced for even faster re-activation of service worker
  */
+console.log('isManifestV3', isManifestV3);
 if (isManifestV3) {
   setInterval(() => {
     browser.runtime.sendMessage({ name: WORKER_KEEP_ALIVE_MESSAGE });
@@ -54,9 +55,12 @@ async function start() {
 
   // setup stream to background
   let extensionPort = browser.runtime.connect({ name: windowType });
+
+  console.log('windowType========', windowType);
   let connectionStream = new PortStream(extensionPort);
 
   const activeTab = await queryCurrentActiveTab(windowType);
+  console.log('activeTab=====', activeTab);
 
   /**
    * In case of MV3 the issue of blank screen was very frequent, it is caused by UI initialising before background is ready to send state.

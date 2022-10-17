@@ -52,16 +52,19 @@ export function dropQueue(silently) {
 
 // add action to queue
 const executeActionOrAddToRetryQueue = (item) => {
-  if (actionRetryQueue.some((act) => act.actionId === item.actionId)) {
-    return;
-  }
+  console.log('item======', item);
+  // if (actionRetryQueue.some((act) => act.actionId === item.actionId)) {
+  //   return;
+  // }
 
   if (background.connectionStream.readable) {
+    console.log('++++++');
     executeAction({
       action: item,
       disconnectSideeffect: () => actionRetryQueue.push(item),
     });
   } else {
+    console.log('-------');
     actionRetryQueue.push(item);
   }
 };
@@ -114,18 +117,21 @@ export const callBackgroundMethod = (
   callback,
   actionId = Date.now() + Math.random(), // current date is not guaranteed to be unique
 ) => {
-  if (isManifestV3) {
-    const resolve = (value) => callback(null, value);
-    const reject = (err) => callback(err);
-    executeActionOrAddToRetryQueue({
-      actionId,
-      request: { method, args },
-      resolve,
-      reject,
-    });
-  } else {
-    background[method](...args, callback);
-  }
+  console.log('isManifestV3', isManifestV3);
+  // if (isManifestV3) {
+  console.log(1);
+  const resolve = (value) => callback(null, value);
+  const reject = (err) => callback(err);
+  executeActionOrAddToRetryQueue({
+    actionId,
+    request: { method, args },
+    resolve,
+    reject,
+  });
+  // } else {
+  //   console.log(2);
+  //   background[method](...args, callback);
+  // }
 };
 
 async function executeAction({ action, disconnectSideeffect }) {
@@ -135,6 +141,7 @@ async function executeAction({ action, disconnectSideeffect }) {
     reject,
   } = action;
   try {
+    console.log('-=-=-=-=-=-=-=-=');
     resolve(await promisifiedBackground[method](...args));
   } catch (err) {
     if (
@@ -188,13 +195,13 @@ async function processActionRetryQueue() {
 export async function _setBackgroundConnection(backgroundConnection) {
   background = backgroundConnection;
   promisifiedBackground = pify(background);
-  if (isManifestV3) {
-    if (processingQueue) {
-      console.warn(
-        '_setBackgroundConnection called while a queue was processing and not disconnected yet',
-      );
-    }
-    // Process all actions collected while connection stream was not available.
-    processActionRetryQueue();
+  // if (isManifestV3) {
+  if (processingQueue) {
+    console.warn(
+      '_setBackgroundConnection called while a queue was processing and not disconnected yet',
+    );
   }
+  // Process all actions collected while connection stream was not available.
+  processActionRetryQueue();
+  // }
 }

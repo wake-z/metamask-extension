@@ -104,6 +104,7 @@ export default class MetaMetricsOptIn extends Component {
               cancelText={t('noThanks')}
               hideCancel={false}
               onSubmit={async () => {
+                console.log(2222);
                 await setParticipateInMetaMetrics(true);
                 try {
                   if (

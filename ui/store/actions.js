@@ -139,12 +139,14 @@ export function createNewVaultAndRestore(password, seedPhrase) {
 }
 
 export function createNewVaultAndGetSeedPhrase(password) {
+  console.log('=====5555====');
   return async (dispatch) => {
     dispatch(showLoadingIndication());
 
     try {
       await createNewVault(password);
       const seedPhrase = await verifySeedPhrase();
+      console.log('seedPhrase====', seedPhrase);
       return seedPhrase;
     } catch (error) {
       dispatch(displayWarning(error.message));
@@ -156,13 +158,15 @@ export function createNewVaultAndGetSeedPhrase(password) {
 }
 
 export function unlockAndGetSeedPhrase(password) {
+  console.log('=====7777=====');
   return async (dispatch) => {
     dispatch(showLoadingIndication());
-
+    console.log('78787878');
     try {
       await submitPassword(password);
       const seedPhrase = await verifySeedPhrase();
       await forceUpdateMetamaskState(dispatch);
+      console.log('seedPhrase=====', seedPhrase);
       return seedPhrase;
     } catch (error) {
       dispatch(displayWarning(error.message));
@@ -187,13 +191,15 @@ export function submitPassword(password) {
 }
 
 export function createNewVault(password) {
+  console.log(8888888);
   return new Promise((resolve, reject) => {
     callBackgroundMethod('createNewVaultAndKeychain', [password], (error) => {
       if (error) {
+        console.log(777777);
         reject(error);
         return;
       }
-
+      console.log(666666);
       resolve(true);
     });
   });
@@ -218,6 +224,7 @@ export async function verifySeedPhrase() {
 }
 
 export function requestRevealSeedWords(password) {
+  console.log('=====4444====');
   return async (dispatch) => {
     dispatch(showLoadingIndication());
     log.debug(`background.verifyPassword`);
@@ -2628,6 +2635,7 @@ export function toggleAccountMenu() {
 
 export function setParticipateInMetaMetrics(val) {
   return (dispatch) => {
+    console.log(123213);
     log.debug(`background.setParticipateInMetaMetrics`);
     return new Promise((resolve, reject) => {
       callBackgroundMethod(
